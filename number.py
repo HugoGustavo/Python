@@ -119,5 +119,3 @@ print("tan(math.pi/4): ", math.tan(math.pi/4));
 print("degrees(math.pi/2): ", math.degrees(math.pi/2));
 print("radians(90.0): ", math.radians(90.0));
 print();
-
-
