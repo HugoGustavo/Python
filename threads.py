@@ -18,35 +18,32 @@ except:
   #  pass
 
 import threading
+import queue
 
 exitFlag = 0;
 
 class myThread(threading.Thread):
-    def __init__(self, threadID, name, counter):
+    def __init__(self, threadID, name, q):
         threading.Thread.__init__(self);
         self.threadID = threadID;
         self.name = name;
-        self.counter = counter;
+        self.q = q;
     
     def run(self):
         print("Starting ", self.name);
-        print_time2(self.name, self.counter,5);
+        process_data(self.name, self.q);
         print("Exiting " + self.name);
+    
+def process_data(threadName, q):
+    while (not exitFlag):
+        queueLock.acquire()
+        if ( not workQueue.empty() ):
+            data = q.get()
+            queueLock.release()
+            print( "%s processing %s" % (threadName, data));
+        else:
+            queueLock.release()
+        time.sleep(1)
 
-def print_time2(threadName, delay, counter):
-    while(counter):
-        if (exitFlag):
-            threadName.exit()
-        time.sleep(delay);
-        print("%s: %s" % (threadName, time.ctime(time.time())));
-        counter -= 1;
-
-thread1 = myThread(1, "Thread-1", 1);
-thread2 = myThread(2, "Thread-2", 2);
-
-thread1.start();
-thread2.start();
-thread1.join();
-thread2.join();
-print("Exiting Main Thread");
-
+threadList = ["Thread-1", "Thread-2", "Thread-3"];
+nameList = [ "One", "Two", "Three", "Four", "Five"];
