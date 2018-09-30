@@ -1,4 +1,6 @@
 import xml.sax
+from xml.dom.minidom import parse
+import xml.dom.minidom
 
 class MovieHandler(xml.sax.ContentHandler):
     def __init__(self):
@@ -52,3 +54,22 @@ if ( __name__ == "__main__" ):
     handler = MovieHandler()
     parser.setContentHandler(handler);
     parser.parse("movies.xml");
+    print();
+
+    DomTree = xml.dom.minidom.parse("movies.xml");
+    collection = DomTree.documentElement;
+    if ( collection.hasAttribute("shelf") ):
+        print("Root element: ", collection.getAttribute("shelf"));
+    movies = collection.getElementsByTagName("movie");
+    for movie in movies:
+        print ("****Movie****");
+        if ( movie.hasAttribute("title") ):
+            print("Title: %s" % movie.getAttribute("movie"));
+        type = movie.getElementsByTagName('type')[0];
+        print("Type: %s" % type);
+        format = movie.getElementsByTagName('format')[0];
+        print("Format: %s" % format);
+        rating = movie.getElementsByTagName('rating')[0];
+        print("Rating: %s" % rating);
+        description = movie.getElementsByTagName('description')[0];
+        print("Description: %s" % description.childNodes[0].data);
